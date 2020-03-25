@@ -6,6 +6,8 @@ go-revolut is a Go client library for the [Revolut API](https://developers.revol
     * OAuth
     * Accounts
     * Counterparties
+    * Payments
+    * Transfers
     
 ### Install
 ```
@@ -17,25 +19,29 @@ go-revolut is a Go client library for the [Revolut API](https://developers.revol
 for setup business api visit [official documentation](https://developers.revolut.com/docs/#business-api-business-api-authentication-setting-up-access-to-your-business-account) 
 
 #### Create client
+Every access token is valid for 40 minutes, after which is automatically refresh.
+
+> For businesses on the freelancer plan: You can do this for 90 days, after which the refresh token will not be valid anymore. You will then need to repeat the API authorisation process, as required by the PSD2 regulations.
+
+
 ```go
-    clientId := "pOoEBEmp8CwpBDgf3opC7aPnSe9OaSCC-fvvoti_RJU"
-    sandbox := true 
+	clientId := "pOoEBEmp8CwpBDgf3opC7aPnSe9OaSCC-fvvoti_RJU"
+	issuer := "webhook.site"
+	privateKeyFilename := "privatekey.pem"
+	sandbox := true
+	refreshToken := "oa_sand_mYSDtsl9SXjEEOy7maxO_ISrAOeqji_Eo30y6GSCRnc"
 
-    bC := business.NewClient(clientId, sandbox)
-```
-
-#### OAuth
-```go
-	oa := bC.OAuth("privatekey.pem", issuer)
-
-    // exchange an authorisation code with an access token.
-	token, err := oa.ExchangeAuthorisationCode("oa_sand_lQRYFO66KjP1HHMOqj1Bfo_PZLThUi2onuyBaBfWTaE")
+	privateKeyFile, err := ioutil.ReadFile(privateKeyFilename)
 	if err != nil {
 		panic(err)
 	}
 
-    // request new access token
-	token, err := oa.RefreshAccessToken("oa_sand_mYSDtsl9SXjEEOy7maxO_ISrAOeqji_Eo30y6GSCRnc")
+	privateKey, err := jwt.ParseRSAPrivateKeyFromPEM(privateKeyFile)
+	if err != nil {
+		panic(err)
+	}
+
+	bC,err := business.NewClient(clientId, refreshToken, privateKey, issuer, sandbox)
 	if err != nil {
 		panic(err)
 	}
@@ -43,7 +49,7 @@ for setup business api visit [official documentation](https://developers.revolut
 
 #### Accounts
 ```go
-    a := bC.Account(token.AccessToken)
+    a := bC.Account()
 
     // retrieve all accounts
 	accounts, err := a.GetAccounts()
@@ -62,4 +68,4 @@ for setup business api visit [official documentation](https://developers.revolut
 	}
 ```
 
-More examples you can find in main.go
+More examples you can find in [main.go](https://github.com/rysavyvladan/go-revolut/blob/master/cmd/go-revolut/main.go)

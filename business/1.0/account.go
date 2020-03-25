@@ -12,6 +12,8 @@ import (
 type AccountService struct {
 	accessToken string
 	sandbox     bool
+
+	err error
 }
 
 type AccountState string
@@ -110,6 +112,9 @@ type BeneficiaryAddress struct {
 // GetAccounts: This endpoint retrieves your accounts.
 // doc: https://revolut-engineering.github.io/api-docs/#business-api-business-api-accounts-get-accounts
 func (a *AccountService) GetAccounts() ([]*AccountResp, error) {
+	if a.err != nil {
+		return nil, a.err
+	}
 
 	resp, statusCode, err := request.New(request.Config{
 		Method:      http.MethodGet,
@@ -126,17 +131,21 @@ func (a *AccountService) GetAccounts() ([]*AccountResp, error) {
 		return nil, errors.New(string(resp))
 	}
 
-	var accounts []*AccountResp
-	if err := json.Unmarshal(resp, &accounts); err != nil {
+	var r []*AccountResp
+	if err := json.Unmarshal(resp, &r); err != nil {
 		return nil, err
 	}
 
-	return accounts, nil
+	return r, nil
 }
 
 // GetAccount: This endpoint retrieves one of your accounts by ID.
 // doc: https://revolut-engineering.github.io/api-docs/#business-api-business-api-accounts-get-account
 func (a *AccountService) GetAccount(id string) (*AccountResp, error) {
+	if a.err != nil {
+		return nil, a.err
+	}
+
 	resp, statusCode, err := request.New(request.Config{
 		Method:      http.MethodGet,
 		Url:         fmt.Sprintf("https://b2b.revolut.com/api/1.0/accounts/%s", id),
@@ -165,8 +174,8 @@ func (a *AccountService) GetAccount(id string) (*AccountResp, error) {
 //	resp, err := request.New(request.Config{
 //		Method:      http.MethodGet,
 //		Url:         fmt.Sprintf("https://b2b.revolut.com/api/1.0/accounts/%s/bank-details", id),
-//		AccessToken: a.accessToken,
-//		Sandbox:     a.sandbox,
+//		AccessToken: a.AccessToken,
+//		Sandbox:     a.Sandbox,
 //		Body:        nil,
 //	})
 //	if err != nil {

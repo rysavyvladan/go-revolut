@@ -2,37 +2,35 @@ package main
 
 import (
 	"fmt"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/rysavyvladan/go-revolut/business/1.0"
+	"io/ioutil"
 )
 
 func main() {
 	clientId := "pOoEBEmp8CwpBDgf3opC7aPnSe9OaSCC-fvvoti_RJU"
 	issuer := "webhook.site"
+	privateKeyFilename := "privatekey.pem"
+	sandbox := true
+	refreshToken := "oa_sand_mYSDtsl9SXjEEOy7maxO_ISrAOeqji_Eo30y6GSCRnc"
 
-	bC := business.NewClient(clientId, true)
-
-	fmt.Println("--- CLIENTS ---")
-
-	oa := bC.OAuth("privatekey.pem", issuer)
-
-	//token, err := oauth.ExchangeAuthorisationCode("oa_sand_lQRYFO66KjP1HHMOqj1Bfo_PZLThUi2onuyBaBfWTaE")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//fmt.Println(token)
-
-	fmt.Println("\nRefresh access token:")
-
-	token, err := oa.RefreshAccessToken("oa_sand_mYSDtsl9SXjEEOy7maxO_ISrAOeqji_Eo30y6GSCRnc")
+	privateKeyFile, err := ioutil.ReadFile(privateKeyFilename)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(token.AccessToken)
+	privateKey, err := jwt.ParseRSAPrivateKeyFromPEM(privateKeyFile)
+	if err != nil {
+		panic(err)
+	}
 
+	bC, err := business.NewClient(clientId, refreshToken, privateKey, issuer, sandbox)
+	if err != nil {
+		panic(err)
+	}
 	fmt.Println("\n--- ACCOUNTS ---")
 
-	a := bC.Account(token.AccessToken)
+	a := bC.Account()
 
 	fmt.Println("\nList of all accounts:")
 
@@ -64,7 +62,7 @@ func main() {
 	//fmt.Println(da)
 
 	fmt.Println("\n--- COUNTERARTIES ---")
-	cp := bC.Counterparty(token.AccessToken)
+	cp := bC.Counterparty()
 
 	fmt.Println("\nCreate revolut counterparty:")
 	revolutCounterparty, err := cp.AddRevolutCounterparty(&business.RevolutCounterpartyReq{
@@ -133,5 +131,36 @@ func main() {
 	}
 	for _, counterparty := range counterparties {
 		fmt.Println(counterparty)
+	}
+
+	//fmt.Println("\n--- TRANSFERS ---")
+	//t := bC.Transfer()
+	//transfer, err := t.CreateTransfer(&business.TransferReq{
+	//	RequestId:       "e0cbf84637264ee082a848c",
+	//	SourceAccountId: "af7b7bec-fa83-4528-84ff-5203d97cdc1c",
+	//	TargetAccountId: "aa430e82-be4d-4880-a59b-a568c0f10043",
+	//	Amount:          1,
+	//	Currency:        "GBP",
+	//	Reference:       "Test reference payment",
+	//})
+	//if err != nil {
+	//	panic(err)
+	//}
+	//fmt.Println(transfer)
+
+	fmt.Println("\n--- PAYMENT ---")
+	t := bC.Payment()
+	transactions, err := t.GetTransactions(&business.TransactionReq{
+		//From:         "2017-06-01",
+		//To:           "2017-06-10",
+		//Counterparty: "",
+		//Count:        20,
+		//Type:         "",
+	})
+	if err != nil {
+		panic(err)
+	}
+	for _, transaction := range transactions {
+		fmt.Println(transaction)
 	}
 }

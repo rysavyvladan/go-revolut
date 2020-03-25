@@ -4,6 +4,7 @@ import (
 	"crypto/rsa"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/rysavyvladan/go-revolut/business/1.0/request"
 	"net/http"
@@ -15,6 +16,15 @@ type OAuthService struct {
 	privateKey *rsa.PrivateKey
 	issuer     string
 	sandbox    bool
+}
+
+func NewOAuth(clientId string, privateKey *rsa.PrivateKey, issuer string, sandbox bool) *OAuthService {
+	return &OAuthService{
+		clientId:   clientId,
+		privateKey: privateKey,
+		issuer:     issuer,
+		sandbox:    sandbox,
+	}
 }
 
 const (
@@ -34,6 +44,13 @@ type OAuthResp struct {
 	ExpiresIn int32 `json:"expires_in"`
 	// A token to be used to request a new access token
 	RefreshToken string `json:"refresh_token"`
+}
+
+type AuthorizationCodeResp struct {
+	// the account ID
+	Id string
+	// the user authorisation code (if granted)
+	Code string
 }
 
 // ExchangeAuthorisationCode: This endpoint is used to exchange an authorisation code with an access token.
@@ -109,6 +126,31 @@ func (oa *OAuthService) RefreshAccessToken(refreshToken string) (*OAuthResp, err
 
 	r := &OAuthResp{}
 	if err := json.Unmarshal(resp, r); err != nil {
+		return nil, err
+	}
+
+	return r, nil
+}
+
+// GetAuthorisationCode: Navigate the user to this address to request an authorisation code
+// doc: https://revolut-engineering.github.io/api-docs/business-api/#oauth-get-authorisation-code
+func (oa *OAuthService) GetAuthorisationCode(clientId, redirectUri string) ([]*AuthorizationCodeResp, error) {
+
+	resp, statusCode, err := request.New(request.Config{
+		Method: http.MethodGet,
+		Url:    fmt.Sprintf("https://business.revolut.com/app-confirm?client_id=%s&redirect_uri%s", clientId, redirectUri),
+		Body:   nil,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if statusCode != http.StatusOK {
+		return nil, errors.New(string(resp))
+	}
+
+	var r []*AuthorizationCodeResp
+	if err := json.Unmarshal(resp, &r); err != nil {
 		return nil, err
 	}
 
