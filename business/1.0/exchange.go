@@ -28,18 +28,18 @@ type ExchangeRateReq struct {
 
 type ExchangeRateResp struct {
 	// information about the currency to exchange from
-	From ExchangeRateAmount `json:"from"`
+	From Amount `json:"from"`
 	// information about the currency to exchange to
-	To ExchangeRateAmount `json:"to"`
+	To Amount `json:"to"`
 	// exchange rate
 	Rate float64 `json:"rate"`
 	// fee for the operation
-	Fee ExchangeRateAmount `json:"fee"`
+	Fee Amount `json:"fee"`
 	// date of proposed exchange rate
 	RateDate time.Time `json:"rate_date"`
 }
 
-type ExchangeRateAmount struct {
+type Amount struct {
 	Amount   float64 `json:"amount"`
 	Currency string  `json:"currency"`
 }

@@ -116,23 +116,23 @@ func (b *Client) Payment() *PaymentService {
 	}
 }
 
-//func (b *Client) PaymentDraft() *PaymentDraftService {
-//	if b.accessTokenExpiration < time.Now().Unix() {
-//		expirationOfAccessToken := time.Now().Unix()
-//		accessToken, err := b.oa.RefreshAccessToken(b.refreshToken)
-//		if err != nil {
-//			return &PaymentDraftService{
-//				err: err,
-//			}
-//		}
-//		b.accessTokenExpiration = expirationOfAccessToken + int64(accessToken.ExpiresIn)
-//	}
-//
-//	return &PaymentDraftService{
-//		accessToken: b.accessToken,
-//		sandbox:     b.sandbox,
-//	}
-//}
+func (b *Client) PaymentDraft() *PaymentDraftService {
+	if b.accessTokenExpiration < time.Now().Unix() {
+		expirationOfAccessToken := time.Now().Unix()
+		accessToken, err := b.oa.RefreshAccessToken(b.refreshToken)
+		if err != nil {
+			return &PaymentDraftService{
+				err: err,
+			}
+		}
+		b.accessTokenExpiration = expirationOfAccessToken + int64(accessToken.ExpiresIn)
+	}
+
+	return &PaymentDraftService{
+		accessToken: b.accessToken,
+		sandbox:     b.sandbox,
+	}
+}
 
 func (b *Client) Exchange() *ExchangeService {
 	if b.accessTokenExpiration < time.Now().Unix() {
@@ -152,20 +152,20 @@ func (b *Client) Exchange() *ExchangeService {
 	}
 }
 
-//func (b *Client) Webhook() *WebhookService {
-//	if b.accessTokenExpiration < time.Now().Unix() {
-//		expirationOfAccessToken := time.Now().Unix()
-//		accessToken, err := b.oa.RefreshAccessToken(b.refreshToken)
-//		if err != nil {
-//			return &WebhookService{
-//				err: err,
-//			}
-//		}
-//		b.accessTokenExpiration = expirationOfAccessToken + int64(accessToken.ExpiresIn)
-//	}
-//
-//	return &WebhookService{
-//		accessToken: b.accessToken,
-//		sandbox:     b.sandbox,
-//	}
-//}
+func (b *Client) Webhook() *WebhookService {
+	if b.accessTokenExpiration < time.Now().Unix() {
+		expirationOfAccessToken := time.Now().Unix()
+		accessToken, err := b.oa.RefreshAccessToken(b.refreshToken)
+		if err != nil {
+			return &WebhookService{
+				err: err,
+			}
+		}
+		b.accessTokenExpiration = expirationOfAccessToken + int64(accessToken.ExpiresIn)
+	}
+
+	return &WebhookService{
+		accessToken: b.accessToken,
+		sandbox:     b.sandbox,
+	}
+}

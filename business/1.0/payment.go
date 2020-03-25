@@ -119,7 +119,7 @@ type TransactionLeg struct {
 	// the transaction leg purpose
 	Description string `json:"description"`
 	// a total balance of the account the transaction is associated with (optional)
-	Balance int `json:"balance"`
+	Balance float64 `json:"balance,omitempty"`
 }
 
 type LegCounterparty struct {
