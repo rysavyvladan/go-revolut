@@ -74,9 +74,9 @@ type ExchangeResp struct {
 	CompletedAt time.Time `json:"completed_at"`
 }
 
-// GetExchangeRates:
+// Rate:
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#exchanges-get-exchange-rates
-func (e *ExchangeService) GetExchangeRates(exchangeRateReq *ExchangeRateReq) (*ExchangeRateResp, error) {
+func (e *ExchangeService) Rate(exchangeRateReq *ExchangeRateReq) (*ExchangeRateResp, error) {
 	if e.err != nil {
 		return nil, e.err
 	}
@@ -107,9 +107,9 @@ func (e *ExchangeService) GetExchangeRates(exchangeRateReq *ExchangeRateReq) (*E
 	return r, nil
 }
 
-// ExchangeCurrency: To check the exchange rate and fees for the operation, please use the /rate endpoint.
+// Exchange: To check the exchange rate and fees for the operation, please use the /rate endpoint.
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#exchanges-exchange-currency
-func (e *ExchangeService) ExchangeCurrency(exchangeReq *ExchangeReq) (*ExchangeResp, error) {
+func (e *ExchangeService) Exchange(exchangeReq *ExchangeReq) (*ExchangeResp, error) {
 	if e.err != nil {
 		return nil, e.err
 	}

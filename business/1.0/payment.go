@@ -167,10 +167,10 @@ type TransactionReq struct {
 	Type PaymentType
 }
 
-// CreatePayment: This endpoint creates a new payment. If the payment is for another Revolut account,
+// Create: This endpoint creates a new payment. If the payment is for another Revolut account,
 // business or personal, the transaction may be processed synchronously.
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#payments-create-payment
-func (p *PaymentService) CreatePayment(paymentReq *PaymentReq) (*TransactionResp, error) {
+func (p *PaymentService) Create(paymentReq *PaymentReq) (*TransactionResp, error) {
 	if p.err != nil {
 		return nil, p.err
 	}
@@ -198,9 +198,9 @@ func (p *PaymentService) CreatePayment(paymentReq *PaymentReq) (*TransactionResp
 	return r, nil
 }
 
-// GetTransactionById: To retrieve a transaction by ID
+// WithId: To retrieve a transaction by ID
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#payments-get-transaction
-func (p *PaymentService) GetTransactionById(id string) (*TransactionResp, error) {
+func (p *PaymentService) WithId(id string) (*TransactionResp, error) {
 	if p.err != nil {
 		return nil, p.err
 	}
@@ -226,9 +226,9 @@ func (p *PaymentService) GetTransactionById(id string) (*TransactionResp, error)
 	return r, nil
 }
 
-// GetTransactionByRequestId: To retrieve a transaction by request ID
+// WithRequestId: To retrieve a transaction by request ID
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#payments-get-transaction
-func (p *PaymentService) GetTransactionByRequestId(requestId string) (*TransactionResp, error) {
+func (p *PaymentService) WithRequestId(requestId string) (*TransactionResp, error) {
 	if p.err != nil {
 		return nil, p.err
 	}
@@ -254,9 +254,9 @@ func (p *PaymentService) GetTransactionByRequestId(requestId string) (*Transacti
 	return r, nil
 }
 
-// CancelPayment: This endpoint allows to cancel a scheduled transaction that was initiated by you, via API.
+// Cancel: This endpoint allows to cancel a scheduled transaction that was initiated by you, via API.
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#payments-get-transaction
-func (p *PaymentService) CancelPayment(id string) error {
+func (p *PaymentService) Cancel(id string) error {
 	if p.err != nil {
 		return p.err
 	}
@@ -277,9 +277,9 @@ func (p *PaymentService) CancelPayment(id string) error {
 	return nil
 }
 
-// GetTransactions: This endpoint retrieves historical transactions based on the provided query criteria.
+// List: This endpoint retrieves historical transactions based on the provided query criteria.
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#payments-get-transaction
-func (p *PaymentService) GetTransactions(transactionReq *TransactionReq) ([]*TransactionResp, error) {
+func (p *PaymentService) List(transactionReq *TransactionReq) ([]*TransactionResp, error) {
 	if p.err != nil {
 		return nil, p.err
 	}

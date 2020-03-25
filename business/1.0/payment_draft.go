@@ -104,9 +104,9 @@ type PaymentDraftDetailPayment struct {
 	CurrentChargeOptions ExchangeRateResp `json:"current_charge_options"`
 }
 
-// CreatePaymentDraft:
+// Create:
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#payment-drafts-create-a-payment-draft
-func (e *ExchangeService) CreatePaymentDraft(paymentDraftReq *PaymentDraftReq) (*PaymentDraftResp, error) {
+func (e *PaymentDraftService) Create(paymentDraftReq *PaymentDraftReq) (*PaymentDraftResp, error) {
 	if e.err != nil {
 		return nil, e.err
 	}
@@ -134,9 +134,9 @@ func (e *ExchangeService) CreatePaymentDraft(paymentDraftReq *PaymentDraftReq) (
 	return r, nil
 }
 
-// GetPaymentDrafts:
+// List:
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#get-payment-drafts
-func (e *ExchangeService) GetPaymentDrafts() (*PaymentDrafts, error) {
+func (e *PaymentDraftService) List() (*PaymentDrafts, error) {
 	if e.err != nil {
 		return nil, e.err
 	}
@@ -162,9 +162,9 @@ func (e *ExchangeService) GetPaymentDrafts() (*PaymentDrafts, error) {
 	return r, nil
 }
 
-// GetPaymentDraftById:
+// WithId:
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#get-payment-drafts-get-payment-draft-by-id
-func (e *ExchangeService) GetPaymentDraftById(id string) (*PaymentDraftDetailPayment, error) {
+func (e *PaymentDraftService) WithId(id string) (*PaymentDraftDetailPayment, error) {
 	if e.err != nil {
 		return nil, e.err
 	}
@@ -190,9 +190,9 @@ func (e *ExchangeService) GetPaymentDraftById(id string) (*PaymentDraftDetailPay
 	return r, nil
 }
 
-// DeletePaymentDraft:
+// Delete:
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#get-payment-drafts-delete-payment-draft
-func (e *ExchangeService) DeletePaymentDraft(id string) error {
+func (e *PaymentDraftService) Delete(id string) error {
 	if e.err != nil {
 		return e.err
 	}

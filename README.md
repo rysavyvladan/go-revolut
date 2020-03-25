@@ -50,12 +50,11 @@ Every access token is valid for 40 minutes, after which is automatically refresh
 	}
 ```
 
+### Examples
 #### Accounts
+##### Get all accounts
 ```go
-    a := bC.Account()
-    
-    // retrieve all accounts
-	accounts, err := a.GetAccounts()
+	accounts, err := bC.Account().List()
 	if err != nil {
 		panic(err)
 	}
@@ -63,12 +62,95 @@ Every access token is valid for 40 minutes, after which is automatically refresh
 	for _, account := range accounts {
 		fmt.Println(account)
 	}
-
-    // retrieve account by id
-	account, err := a.GetAccount(accounts[0].Id)
+```
+##### Get Account by Id
+```go
+	account, err := bC.Account().WithId("8b8be318-e81a-4dee-97b5-35399628814f")
 	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(account)
+```
+
+### Counterparties
+#### Get all counterparties
+```go
+	counterparties, err := bC.Counterparty().List()
+	if err != nil {
+		panic(err)
+	}
+
+	for _, counterparty := range counterparties {
+		fmt.Println(counterparty)
+	}
+```
+
+#### Retrieve counterparty by id
+```go
+	counterparty, err := bC.Counterparty().WithId("2af1d943-a6ee-4ab0-b8b1-67f7d92aa330")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(counterparty)
+```
+
+#### Delete counterparty
+```go
+	if err := bC.Counterparty().Delete("2af1d943-a6ee-4ab0-b8b1-67f7d92aa330"); err != nil {
 		panic(err)
 	}
 ```
 
-More examples you can find in [main.go](https://github.com/rysavyvladan/go-revolut/blob/master/cmd/go-revolut/main.go)
+### Transfers
+#### Create transfer
+```go
+	transfer, err := bC.Transfer().Create(&business.TransferReq{
+		RequestId:       "e0cbf84637264ee082a848c",
+		SourceAccountId: "af7b7bec-fa83-4528-84ff-5203d97cdc1c",
+		TargetAccountId: "aa430e82-be4d-4880-a59b-a568c0f10043",
+		Amount:          1,
+		Currency:        "GBP",
+		Reference:       "Test reference payment",
+	})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(transfer)
+```
+
+
+### Exchanges
+#### Get rates
+```go
+	rate, err := bC.Exchange().Rate(&business.ExchangeRateReq{
+		From:   "USD",
+		To:     "EUR",
+		Amount: 100,
+	})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(rate)
+```
+
+#### Exchange currency
+```go
+	exchange, err := bC.Exchange().Exchange(&business.ExchangeReq{
+		From: business.ExchangeAmount{
+			AccountId: "aa430e82-be4d-4880-a59b-a568c0f10043",
+			Amount:    2,
+			Currency:  "GBP",
+		},
+		To: business.ExchangeAmount{
+			AccountId: "fcdfc950-46c8-4279-9765-4985a92e5ac0",
+			Currency:  "USD",
+		},
+		Reference: "Test Exchange",
+		RequestId: "0",
+	})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(exchange)
+```

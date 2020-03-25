@@ -68,9 +68,9 @@ type TransactionCreatedEventData struct {
 	Legs []TransactionLeg `json:"legs"`
 }
 
-// SettingUpWebhook:
+// SettingUp:
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#web-hooks-setting-up-a-web-hook
-func (p *PaymentService) SettingUpWebhook(webhookReq *WebhookReq) error {
+func (p *PaymentService) SettingUp(webhookReq *WebhookReq) error {
 	if p.err != nil {
 		return p.err
 	}
@@ -93,9 +93,9 @@ func (p *PaymentService) SettingUpWebhook(webhookReq *WebhookReq) error {
 	return nil
 }
 
-// DeletingWebhook: Use this API request to delete a web-hook
+// Delete: Use this API request to delete a web-hook
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#web-hooks-setting-up-a-web-hook
-func (p *PaymentService) DeletingWebhook() error {
+func (p *PaymentService) Delete() error {
 	if p.err != nil {
 		return p.err
 	}

@@ -51,9 +51,9 @@ type TransferResp struct {
 	CompletedAt time.Time `json:"completed_at"`
 }
 
-// CreateTransfer: This endpoint processes transfers between accounts of the business with the same currency.
+// Create: This endpoint processes transfers between accounts of the business with the same currency.
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#transfers-create-transfer
-func (t *TransferService) CreateTransfer(transferReq *TransferReq) (*TransferResp, error) {
+func (t *TransferService) Create(transferReq *TransferReq) (*TransferResp, error) {
 	if t.err != nil {
 		return nil, t.err
 	}

@@ -109,9 +109,9 @@ type BeneficiaryAddress struct {
 	Postcode string `json:"postcode"`
 }
 
-// GetAccounts: This endpoint retrieves your accounts.
+// List: This endpoint retrieves your accounts.
 // doc: https://revolut-engineering.github.io/api-docs/#business-api-business-api-accounts-get-accounts
-func (a *AccountService) GetAccounts() ([]*AccountResp, error) {
+func (a *AccountService) List() ([]*AccountResp, error) {
 	if a.err != nil {
 		return nil, a.err
 	}
@@ -139,9 +139,9 @@ func (a *AccountService) GetAccounts() ([]*AccountResp, error) {
 	return r, nil
 }
 
-// GetAccount: This endpoint retrieves one of your accounts by ID.
+// WithId: This endpoint retrieves one of your accounts by ID.
 // doc: https://revolut-engineering.github.io/api-docs/#business-api-business-api-accounts-get-account
-func (a *AccountService) GetAccount(id string) (*AccountResp, error) {
+func (a *AccountService) WithId(id string) (*AccountResp, error) {
 	if a.err != nil {
 		return nil, a.err
 	}

@@ -144,9 +144,9 @@ type CounterpartyRespAccount struct {
 	RecipientCharges CounterpartyRecipientCharges `json:"recipient_charges"`
 }
 
-// AddRevolutCounterparty: You can create a counterparty for an existing Revolut user.
+// AddRevolut: You can create a counterparty for an existing Revolut user.
 // doc: https://revolut-engineering.github.io/api-docs/#business-api-business-api-counterparties-add-revolut-counterparty
-func (c *CounterpartyService) AddRevolutCounterparty(revolutCounterparty *RevolutCounterpartyReq) (*CounterpartyResp, error) {
+func (c *CounterpartyService) AddRevolut(revolutCounterparty *RevolutCounterpartyReq) (*CounterpartyResp, error) {
 	if c.err != nil {
 		return nil, c.err
 	}
@@ -174,9 +174,9 @@ func (c *CounterpartyService) AddRevolutCounterparty(revolutCounterparty *Revolu
 	return r, nil
 }
 
-// AddNonRevolutCounterparty: You can create a counterparty for an non-Revolut bank account.
+// AddNonRevolut: You can create a counterparty for an non-Revolut bank account.
 // doc: https://revolut-engineering.github.io/api-docs/#business-api-business-api-counterparties-add-non-revolut-counterparty
-func (c *CounterpartyService) AddNonRevolutCounterparty(nonRevolutCounterparty *NonRevolutCounterpartyReq) (*CounterpartyResp, error) {
+func (c *CounterpartyService) AddNonRevolut(nonRevolutCounterparty *NonRevolutCounterpartyReq) (*CounterpartyResp, error) {
 	if c.err != nil {
 		return nil, c.err
 	}
@@ -205,10 +205,10 @@ func (c *CounterpartyService) AddNonRevolutCounterparty(nonRevolutCounterparty *
 	return r, nil
 }
 
-// DeleteCounterparty: This endpoint deletes a counterparty with the given ID.
+// Delete: This endpoint deletes a counterparty with the given ID.
 // Once a counterparty is deleted no payments can be made to it.
 // doc: https://revolut-engineering.github.io/api-docs/#business-api-business-api-counterparties-delete-counterparty
-func (c *CounterpartyService) DeleteCounterparty(id string) error {
+func (c *CounterpartyService) Delete(id string) error {
 	if c.err != nil {
 		return c.err
 	}
@@ -232,9 +232,9 @@ func (c *CounterpartyService) DeleteCounterparty(id string) error {
 	return nil
 }
 
-// GetCounterparty: This endpoint retrieves a counterparty by ID.
+// WithId: This endpoint retrieves a counterparty by ID.
 // doc https://revolut-engineering.github.io/api-docs/#business-api-business-api-counterparties-get-counterparty
-func (c *CounterpartyService) GetCounterparty(id string) (*CounterpartyResp, error) {
+func (c *CounterpartyService) WithId(id string) (*CounterpartyResp, error) {
 	if c.err != nil {
 		return nil, c.err
 	}
@@ -262,9 +262,9 @@ func (c *CounterpartyService) GetCounterparty(id string) (*CounterpartyResp, err
 	return r, nil
 }
 
-// GetCounterparties: This endpoint retrieves all your counterparties.
+// List: This endpoint retrieves all your counterparties.
 // doc: https://revolut-engineering.github.io/api-docs/#business-api-business-api-counterparties-get-counterparties
-func (c *CounterpartyService) GetCounterparties() ([]*CounterpartyResp, error) {
+func (c *CounterpartyService) List() ([]*CounterpartyResp, error) {
 	if c.err != nil {
 		return nil, c.err
 	}
