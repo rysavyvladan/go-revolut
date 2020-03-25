@@ -23,6 +23,14 @@ const (
 	CounterpartyProfileType_PERSONAL CounterpartyProfileType = "personal"
 )
 
+type CounterpartyType string
+
+const (
+	CounterpartyType_SELF     CounterpartyType = "self"
+	CounterpartyType_REVOLUT  CounterpartyType = "revolut"
+	CounterpartyType_EXTERNAL CounterpartyType = "external"
+)
+
 type RevolutCounterpartyReq struct {
 	// the type of the Revolut profile, business or personal
 	ProfileType CounterpartyProfileType `json:"profile_type"`

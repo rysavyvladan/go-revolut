@@ -8,6 +8,9 @@ go-revolut is a Go client library for the [Revolut API](https://developers.revol
     * Counterparties
     * Payments
     * Transfers
+    * Exchanges
+    * Payment Drafts
+    * Webhooks
     
 ### Install
 ```
@@ -50,7 +53,7 @@ Every access token is valid for 40 minutes, after which is automatically refresh
 #### Accounts
 ```go
     a := bC.Account()
-
+    
     // retrieve all accounts
 	accounts, err := a.GetAccounts()
 	if err != nil {

@@ -163,4 +163,34 @@ func main() {
 	for _, transaction := range transactions {
 		fmt.Println(transaction)
 	}
+
+	fmt.Println("\n--- EXCHANGE ---")
+	e := bC.Exchange()
+	rate, err := e.GetExchangeRates(&business.ExchangeRateReq{
+		From:   "USD",
+		To:     "EUR",
+		Amount: 100,
+	})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(rate)
+
+	//exchange, err := e.ExchangeCurrency(&business.ExchangeReq{
+	//	From: business.ExchangeAmount{
+	//		AccountId: "aa430e82-be4d-4880-a59b-a568c0f10043",
+	//		Amount:    2,
+	//		Currency:  "GBP",
+	//	},
+	//	To: business.ExchangeAmount{
+	//		AccountId: "fcdfc950-46c8-4279-9765-4985a92e5ac0",
+	//		Currency:  "USD",
+	//	},
+	//	Reference: "Test Exchange",
+	//	RequestId: "0",
+	//})
+	//if err != nil {
+	//	panic(err)
+	//}
+	//fmt.Println(exchange)
 }
