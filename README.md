@@ -11,6 +11,9 @@ go-revolut is a Go client library for the [Revolut API](https://developers.revol
     * Exchanges
     * Payment Drafts
     * Webhooks
+* Merchant API
+    * Orders
+    * Webhooks
     
 ### Install
 ```

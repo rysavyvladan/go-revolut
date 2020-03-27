@@ -14,11 +14,6 @@ type WebhookService struct {
 	err error
 }
 
-type WebhookReq struct {
-	// call back endpoint of the client system, https is the supported protocol
-	Url string `json:"url"`
-}
-
 type TransactionStateChangedEvent struct {
 	// the event name
 	Event string `json:"event"`
@@ -68,9 +63,9 @@ type TransactionCreatedEventData struct {
 	Legs []TransactionLeg `json:"legs"`
 }
 
-// SettingUp:
+// Set:
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#web-hooks-setting-up-a-web-hook
-func (p *PaymentService) SettingUp(webhookReq *WebhookReq) error {
+func (p *WebhookService) Set(url string) error {
 	if p.err != nil {
 		return p.err
 	}
@@ -80,7 +75,10 @@ func (p *PaymentService) SettingUp(webhookReq *WebhookReq) error {
 		Url:         "https://b2b.revolut.com/api/1.0/webhook",
 		AccessToken: p.accessToken,
 		Sandbox:     p.sandbox,
-		Body:        webhookReq,
+		Body: struct {
+			// call back endpoint of the client system, https is the supported protocol
+			Url string `json:"url"`
+		}{Url: url},
 		ContentType: request.ContentType_APPLICATION_JSON,
 	})
 	if err != nil {
@@ -95,7 +93,7 @@ func (p *PaymentService) SettingUp(webhookReq *WebhookReq) error {
 
 // Delete: Use this API request to delete a web-hook
 // doc: https://revolut-engineering.github.io/api-docs/business-api/#web-hooks-setting-up-a-web-hook
-func (p *PaymentService) Delete() error {
+func (p *WebhookService) Delete() error {
 	if p.err != nil {
 		return p.err
 	}
