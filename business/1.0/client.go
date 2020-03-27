@@ -45,127 +45,73 @@ func NewClient(clientId, refreshToken string, privateKey *rsa.PrivateKey, issuer
 }
 
 func (b *Client) Account() *AccountService {
-	if b.accessTokenExpiration < time.Now().Unix() {
-		expirationOfAccessToken := time.Now().Unix()
-		accessToken, err := b.oa.RefreshAccessToken(b.refreshToken)
-		if err != nil {
-			return &AccountService{
-				err: err,
-			}
-		}
-		b.accessTokenExpiration = expirationOfAccessToken + int64(accessToken.ExpiresIn)
-	}
-
 	return &AccountService{
 		accessToken: b.accessToken,
 		sandbox:     b.sandbox,
+		err:         b.refreshAccessToken(),
 	}
 }
 
 func (b *Client) Counterparty() *CounterpartyService {
-	if b.accessTokenExpiration < time.Now().Unix() {
-		expirationOfAccessToken := time.Now().Unix()
-		accessToken, err := b.oa.RefreshAccessToken(b.refreshToken)
-		if err != nil {
-			return &CounterpartyService{
-				err: err,
-			}
-		}
-		b.accessTokenExpiration = expirationOfAccessToken + int64(accessToken.ExpiresIn)
-	}
-
 	return &CounterpartyService{
 		accessToken: b.accessToken,
 		sandbox:     b.sandbox,
+		err:         b.refreshAccessToken(),
 	}
 }
 
 func (b *Client) Transfer() *TransferService {
-	if b.accessTokenExpiration < time.Now().Unix() {
-		expirationOfAccessToken := time.Now().Unix()
-		accessToken, err := b.oa.RefreshAccessToken(b.refreshToken)
-		if err != nil {
-			return &TransferService{
-				err: err,
-			}
-		}
-		b.accessTokenExpiration = expirationOfAccessToken + int64(accessToken.ExpiresIn)
-	}
-
 	return &TransferService{
 		accessToken: b.accessToken,
 		sandbox:     b.sandbox,
+		err:         b.refreshAccessToken(),
 	}
 }
 
 func (b *Client) Payment() *PaymentService {
-	if b.accessTokenExpiration < time.Now().Unix() {
-		expirationOfAccessToken := time.Now().Unix()
-		accessToken, err := b.oa.RefreshAccessToken(b.refreshToken)
-		if err != nil {
-			return &PaymentService{
-				err: err,
-			}
-		}
-		b.accessTokenExpiration = expirationOfAccessToken + int64(accessToken.ExpiresIn)
-	}
-
 	return &PaymentService{
 		accessToken: b.accessToken,
 		sandbox:     b.sandbox,
+		err:         b.refreshAccessToken(),
 	}
 }
 
 func (b *Client) PaymentDraft() *PaymentDraftService {
-	if b.accessTokenExpiration < time.Now().Unix() {
-		expirationOfAccessToken := time.Now().Unix()
-		accessToken, err := b.oa.RefreshAccessToken(b.refreshToken)
-		if err != nil {
-			return &PaymentDraftService{
-				err: err,
-			}
-		}
-		b.accessTokenExpiration = expirationOfAccessToken + int64(accessToken.ExpiresIn)
-	}
-
 	return &PaymentDraftService{
 		accessToken: b.accessToken,
 		sandbox:     b.sandbox,
+		err:         b.refreshAccessToken(),
 	}
 }
 
 func (b *Client) Exchange() *ExchangeService {
-	if b.accessTokenExpiration < time.Now().Unix() {
-		expirationOfAccessToken := time.Now().Unix()
-		accessToken, err := b.oa.RefreshAccessToken(b.refreshToken)
-		if err != nil {
-			return &ExchangeService{
-				err: err,
-			}
-		}
-		b.accessTokenExpiration = expirationOfAccessToken + int64(accessToken.ExpiresIn)
-	}
-
 	return &ExchangeService{
 		accessToken: b.accessToken,
 		sandbox:     b.sandbox,
+		err:         b.refreshAccessToken(),
 	}
 }
 
 func (b *Client) Webhook() *WebhookService {
-	if b.accessTokenExpiration < time.Now().Unix() {
-		expirationOfAccessToken := time.Now().Unix()
-		accessToken, err := b.oa.RefreshAccessToken(b.refreshToken)
-		if err != nil {
-			return &WebhookService{
-				err: err,
-			}
-		}
-		b.accessTokenExpiration = expirationOfAccessToken + int64(accessToken.ExpiresIn)
-	}
-
 	return &WebhookService{
 		accessToken: b.accessToken,
 		sandbox:     b.sandbox,
+		err:         b.refreshAccessToken(),
 	}
+}
+
+func (b *Client) refreshAccessToken() error {
+	if b.accessTokenExpiration > time.Now().Unix() {
+		return nil
+	}
+
+	expirationOfAccessToken := time.Now().Unix()
+	accessToken, err := b.oa.RefreshAccessToken(b.refreshToken)
+	if err != nil {
+		return err
+	}
+	b.accessTokenExpiration = expirationOfAccessToken + int64(accessToken.ExpiresIn)
+	b.accessToken = accessToken.AccessToken
+
+	return nil
 }
