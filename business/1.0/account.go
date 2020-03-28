@@ -169,6 +169,8 @@ func (a *AccountService) WithId(id string) (*AccountResp, error) {
 	return r, nil
 }
 
+// DetailWithId: This endpoint retrieves individual account details.
+// doc: https://revolut-engineering.github.io/api-docs/business-api/#accounts-get-account-details
 func (a *AccountService) DetailWithId(id string) ([]*AccountDetailResp, error) {
 	if a.err != nil {
 		return nil, a.err
