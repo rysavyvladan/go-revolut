@@ -169,25 +169,29 @@ func (a *AccountService) WithId(id string) (*AccountResp, error) {
 	return r, nil
 }
 
-// todo
-//func (a *AccountService) GetAccountDetails(id string) ([]*AccountDetail, error) {
-//	resp, err := request.New(request.Config{
-//		Method:      http.MethodGet,
-//		Url:         fmt.Sprintf("https://b2b.revolut.com/api/1.0/accounts/%s/bank-details", id),
-//		AccessToken: a.AccessToken,
-//		Sandbox:     a.Sandbox,
-//		Body:        nil,
-//	})
-//	if err != nil {
-//		return []*AccountDetail{}, err
-//	}
-//
-//	fmt.Println(string(resp))
-//
-//	r := []*AccountDetail{}
-//	if err := json.Unmarshal(resp, &r); err != nil {
-//		return nil, err
-//	}
-//
-//	return r, nil
-//}
+func (a *AccountService) DetailWithId(id string) ([]*AccountDetailResp, error) {
+	if a.err != nil {
+		return nil, a.err
+	}
+	resp, statusCode, err := request.New(request.Config{
+		Method:      http.MethodGet,
+		Url:         fmt.Sprintf("https://b2b.revolut.com/api/1.0/accounts/%s/bank-details", id),
+		AccessToken: a.accessToken,
+		Sandbox:     a.sandbox,
+		Body:        nil,
+	})
+	if err != nil {
+		return []*AccountDetailResp{}, err
+	}
+
+	if statusCode != http.StatusOK {
+		return nil, errors.New(string(resp))
+	}
+
+	r := []*AccountDetailResp{}
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return r, nil
+}
